@@ -3,7 +3,7 @@ Arduinneto (Arduino Neural Network) is an light opensource library written in C+
 
 ```C++
 if (YOU == project.want_to_participate_to) {
-  message.sendMe();   // it'll be nice ;
+  message.sendMe();   // it'll be nice ;)
   feelFree();
 }
 ```
