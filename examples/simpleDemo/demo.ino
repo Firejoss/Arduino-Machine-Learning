@@ -1,6 +1,20 @@
 
 #include "NeuralNetwork.h"
 
+// prevent compile time error when using std::vector C++ library
+namespace std {
+	void __throw_bad_alloc()
+	{
+		Serial.println("Unable to allocate memory");
+	}
+
+	void __throw_length_error(char const*e)
+	{
+		Serial.print("Length Error :");
+		Serial.println(e);
+	}
+}
+
 #define DEBUG_SERIAL
 
 // shape of the neural network (number of inputs, outputs and intermediate layers)
