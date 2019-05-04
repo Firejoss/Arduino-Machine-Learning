@@ -7,5 +7,6 @@ if (YOU == project.want_to_participate_to) {
 }
 ```
 
-# HOW TO
+## HOW TO
 
+=> see examples folder
