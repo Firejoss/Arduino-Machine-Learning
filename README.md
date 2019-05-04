@@ -1,9 +1,10 @@
 # ArduiNNeto
-Arduinneto (Arduino Neural Network) is an light opensource library written in C++ 11 that allows you to easily configure, train and use the power of neural networks on Arduino and Teensy boards.
+Arduinneto (Arduino Neural Network) is an light opensource library written in C++ 11.
+You can easily configure, train and use the power of :fire:neural networks:fire: on Arduino and Teensy boards.
 
 ```C++
 if (YOU == project.want_to_participate_to) {
-  message.sendMe();   // it'll be nice ;)
+  message.sendMe();
   feelFree();
 }
 ```
