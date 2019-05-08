@@ -1,7 +1,7 @@
 # ArduiNNeto
 Arduinneto (Arduino Neural Network) is an light opensource library written in C++ 11.
 
-It allows to easily configure, train and use the power of neural networks on *Arduino* and *Teensy* boards.<br/><br/>
+It allows to easily configure, train and use neural networks on *Arduino* and *Teensy* boards.<br/><br/>
 
 MLP (Multi Layer Perceptron) | CNN (Convolutionnal Neural Network)
 ---------------------------- | ----------------------------
