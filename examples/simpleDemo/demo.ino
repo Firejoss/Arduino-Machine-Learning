@@ -22,6 +22,8 @@ namespace std {
 #define NN_HIDDEN_LAYERS_SIZES { 6, 3 }
 #define NN_OUTPUT_SIZE 1
 
+NeuralNetwork * simpleNN;
+
 
 //---------------------- NN SCHEMA ----------------------
 //           | - O - |       
@@ -74,32 +76,30 @@ void loop() {
 		v4.push_back(((rand() % 200) - 100) / 100.0);
 	}
 
-	TrainingSet ts0(v0, { 0.0, 0.0 });
-	TrainingSet ts1(v1, { 0.0, 1.0 });
-	TrainingSet ts2(v2, { 1.0, 1.0 });
-	TrainingSet ts3(v3, { });
-	TrainingSet ts4(v4, { });
+	TrainingSet ts0(v0, { 0.5 });
+	TrainingSet ts1(v1, { 0.0 });
+	TrainingSet ts2(v2, { 1.0 });
+	TrainingSet ts3(v3, { 0.7 });
+	TrainingSet ts4(v4, { 1.5 });
 
 	vector<TrainingSet> tsets{ ts0, ts1, ts2, ts3, ts4 };
 
 	for (size_t i = 0; i < 600; i++)
 	{
-		bongoNeuralNetwork->feedInputs(tsets[i % 3]);
-		bongoNeuralNetwork->propagate();
-		bongoNeuralNetwork->feedOutputIdealValues(tsets[i % 3]);
-		bongoNeuralNetwork->backpropagate();
+		simpleNN->feedInputs(tsets[i % 4]);
+		simpleNN->propagate();
+		simpleNN->feedOutputIdealValues(tsets[i % 4]);
+		simpleNN->backpropagate();
 	}
 	Util::printMsg("\n************************");
 	Util::printMsg("*** Training is over ***");
 	Util::printMsg("************************\n");
 
-	for (size_t i = 0; i < tsets.size(); i++)
-	{
-		bongoNeuralNetwork->feedInputs(tsets[i]);
-		bongoNeuralNetwork->propagate();
-		bongoNeuralNetwork->printOutput();
+	for (auto& tset : tsets) {
+		simpleNN->feedInputs(tset);
+		simpleNN->propagate();
+		simpleNN->printOutput();
 	}
-
 
 	while (1);
 }
