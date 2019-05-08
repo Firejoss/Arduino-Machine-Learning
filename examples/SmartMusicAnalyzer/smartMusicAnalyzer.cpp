@@ -5,10 +5,9 @@
 */
 
 #include <map>
-#include <Easing.h>
 #include <Audio.h>
 #include "config.h"
-#include "NeuralNetwork.h"
+#include "../../lib/NeuralNetwork.h"
 #ifdef SAVE_TRAINING_DATA_SDCARD
 	#include <SD.h>
 	#include <SPI.h>

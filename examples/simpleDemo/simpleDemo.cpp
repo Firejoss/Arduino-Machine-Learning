@@ -1,5 +1,5 @@
 
-#include "NeuralNetwork.h"
+#include "../../lib/NeuralNetwork.h"
 
 // prevent compile time error when using std::vector C++ library
 namespace std {
