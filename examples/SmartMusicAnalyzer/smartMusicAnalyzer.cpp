@@ -40,120 +40,6 @@ vector<int>				lastFFTMaxPeaks;
 //-------------------------------------------------------------------------------------------------
 //-------------------------------------------------------------------------------------------------
 
-void pulseLed(int led_pin, nn_double power) {
-
-	if (power > 100) power = 100;
-	if (power < 0) power = 0;
-	else if (power < 0) power = 0;
-
-	int dur = 200 * (0.35 + (power / 100));
-	int max = 255 * (0.05 + power / 100);
-
-	for (int pos = 0; pos < dur; pos++) {
-		analogWrite(led_pin, max - Easing::easeOutExpo(pos, 0, max, dur));
-		delay(2);
-	}
-}
-
-bool detectAttack() {
-
-	int startIndex = 2;				// ignore 0 and 1 index for irrelevant fft values
-
-	bool hasThresholdPeak = false;
-	vector<float> fftOutput;
-	vector<float> fftDeltas;
-
-	for (size_t i = startIndex; i < FFT_INPUT_SIZE; i++) {
-
-		float val = fft1.read(i);
-		fftOutput.push_back(val > 0.02 ? val : 0);
-		fftDeltas.push_back(fftOutput.back() - lastFFTOutput[i - startIndex]);
-
-		hasThresholdPeak = hasThresholdPeak || val > FFT_THRESHOLD;
-	}
-	if (!hasThresholdPeak) {
-		return false;
-	}
-
-	// check if new peaks appeared
-	float deltasSum = 0;
-	for (size_t j = 0; j < fftDeltas.size(); j++) {
-		deltasSum += fftDeltas[j] > 0.02 ? fftDeltas[j] : 0;
-	}
-	if (deltasSum < 0.30) {
-		return false;
-	}
-
-	// get max peaks indexes
-	vector<int> fftMaxPeaks;
-	vector<float> fftOutputTemp(fftOutput.begin(), fftOutput.end());
-
-	while (fftMaxPeaks.size() < NN_INPUT_SIZE)
-	{
-		int outputTempCount = fftOutputTemp.size();
-		float maxVal = 0;
-		int maxValIndex = 0;
-
-		for (size_t k = 0; k < outputTempCount; k++)
-		{
-			if (fftOutputTemp[k] > maxVal) {
-				maxVal = fftOutputTemp[k];
-				maxValIndex = k;
-			}
-		}
-		fftMaxPeaks.push_back(maxValIndex);
-		fftOutputTemp[maxValIndex] = 0;
-	}
-
-	// remove duplicate adjacent peaks
-	fftMaxPeaks.erase(
-		std::remove(fftMaxPeaks.begin(), fftMaxPeaks.end(), 0),
-		fftMaxPeaks.end());
-
-	for (size_t m = 0; m < fftMaxPeaks.size(); m++)
-	{
-		fftMaxPeaks.erase(
-			std::remove(fftMaxPeaks.begin(), fftMaxPeaks.end(), fftMaxPeaks[m] + 1),
-			fftMaxPeaks.end());
-		fftMaxPeaks.erase(
-			std::remove(fftMaxPeaks.begin(), fftMaxPeaks.end(), fftMaxPeaks[m] - 1),
-			fftMaxPeaks.end());
-		fftMaxPeaks.erase(
-			std::remove(fftMaxPeaks.begin(), fftMaxPeaks.end(), fftMaxPeaks[m] + 2),
-			fftMaxPeaks.end());
-		fftMaxPeaks.erase(
-			std::remove(fftMaxPeaks.begin(), fftMaxPeaks.end(), fftMaxPeaks[m] - 2),
-			fftMaxPeaks.end());		
-	}
-
-	// checking of max peaks are not the same from previous fft
-	int similarityCount = 0;
-	for (size_t m = 0; m < fftMaxPeaks.size(); m++)
-	{
-		for (size_t n = 0; n < lastFFTMaxPeaks.size(); n++)
-		{
-			int deltaPeaks = abs(lastFFTMaxPeaks[n] - fftMaxPeaks[m]);
-			if (deltaPeaks < 2) similarityCount++;
-		}
-	}
-	if (similarityCount > 2) {
-		Util::printMsg("--s--");
-		return false;
-	}
-
-	vector<float> peakValues;
-	for (auto& peakIndex : fftMaxPeaks) {
-		peakValues.push_back(fftOutput[peakIndex]);
-	}
-	Util::printMsgInts("\nFFT Max Peak Indexes => ", fftMaxPeaks);
-	Util::printMsgFloats("FFT Max Peak VALUES => ", peakValues);
-
-	lastFFTOutput = fftOutput;
-	lastFFTMaxPeaks = fftMaxPeaks;
-	return true;
-
-}
-
 void addTrainingSet(vector<nn_double> &idealOutput) {
 	
 	if (!fft1.available())	return;
@@ -237,6 +123,8 @@ void initDisplay() {
 	digitalWrite(B_PIN, OFF);
 }
 
+
+// user can choose idel outputs by installing buttons on digitalPort inputs
 void updateCurrentBongoRecordingSelection(vector<nn_double> &currentBongosSelection) {
 	
 	currentBongosSelection = { digitalRead(BONGO_SELECT_BTN_PIN_1), digitalRead(BONGO_SELECT_BTN_PIN_2) };
