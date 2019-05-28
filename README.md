@@ -1,5 +1,5 @@
 # Arduino Machine Learning
-AML is an light opensource library written in C++ 11.
+AML is a light opensource library written in C++ 11.
 
 Training and using neural networks on *Arduino* and *Teensy* boards is NOW EASY.<br/><br/>
 
