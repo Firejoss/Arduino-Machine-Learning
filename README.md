@@ -1,7 +1,7 @@
 # Arduino Machine Learning
 AML is an light opensource library written in C++ 11.
 
-It allows to easily configure, train and use neural networks on *Arduino* and *Teensy* boards.<br/><br/>
+Training and using neural networks on *Arduino* and *Teensy* boards is NOW EASY.<br/><br/>
 
 MLP (Multi Layer Perceptron) | CNN (Convolutionnal Neural Network)
 ---------------------------- | ----------------------------
